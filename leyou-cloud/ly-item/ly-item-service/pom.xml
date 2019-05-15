@@ -33,9 +33,16 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <!--引入interface-->
         <dependency>
             <groupId>leyou.service</groupId>
             <artifactId>ly-item-interface</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <!--引入common  全局controller捕获异常-->
+        <dependency>
+            <groupId>leyou.common</groupId>
+            <artifactId>ly-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
