@@ -3,6 +3,8 @@ package leyou.item.pojo;
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,7 +12,8 @@ import javax.persistence.Table;
 @Data
 public class Category{
 	@Id
-	@KeySql(useGeneratedKeys = true)
+	//@KeySql(useGeneratedKeys = true)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private Long parentId;

@@ -24,7 +24,7 @@ public class CategoryService {
         List<Category> list = categoryMapper.select(t);
         //判断结果
         if(CollectionUtils.isEmpty(list)){
-            throw new LyException(ExceptionEnum.CATEGORY_NOT_FIND);
+            throw new LyException(ExceptionEnum.CATEGORY_NOT_FOUND);
         }
         return list;
     }
