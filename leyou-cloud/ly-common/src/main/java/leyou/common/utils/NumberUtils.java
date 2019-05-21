@@ -28,7 +28,7 @@ public class NumberUtils {
         if(str == null || str.trim().equals("")){
             return false;
         }
-        return str.matches("^\\d+$");
+        return str.matches("^/d+$");
     }
 
     /**
