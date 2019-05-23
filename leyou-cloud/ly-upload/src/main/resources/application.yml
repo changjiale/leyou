@@ -6,10 +6,6 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB  #限制文件上传大小
-  resources:
-    static-locations: E:/code/java_oncedemo/leyou/leyou-cloud/ly-upload/src/main/resources/static/upload/
-  mvc:
-    static-path-pattern: /upload/**
 
 eureka:
   client:
