@@ -28,4 +28,8 @@ public class CategoryService {
         }
         return list;
     }
+
+    public List<Category> queryByIds(List<Long> ids){
+
+    }
 }
