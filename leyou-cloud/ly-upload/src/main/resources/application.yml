@@ -5,7 +5,7 @@ spring:
     name: upload-service
   servlet:
     multipart:
-      max-file-size: 5MB  #限制文件上传大小
+      max-file-size: 10MB  #限制文件上传大小
 
 eureka:
   client:

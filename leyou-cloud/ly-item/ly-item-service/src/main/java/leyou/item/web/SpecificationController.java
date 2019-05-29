@@ -27,8 +27,25 @@ public class SpecificationController {
         return ResponseEntity.ok(specService.queryGroupByCid(cid));
     }
 
+    /**
+     * 查询规格组内的所有参数
+     * @param gid
+     * @return
+     */
+    /**
+     * 根据不同条件查询规格参数
+     * @param gid
+     * @param cid
+     * @param searching
+     * @return
+     */
+
     @GetMapping("params")
-    public ResponseEntity<List<SpecParam>> queryGroupByGid(@RequestParam("gid") Long gid){
-        return ResponseEntity.ok(specService.queryGroupByGid(gid));
+    public ResponseEntity<List<SpecParam>> queryParamList(
+            @RequestParam(value = "gid",required = false) Long gid,
+            @RequestParam(value = "cid",required = false) Long cid,
+            @RequestParam(value = "searching",required = false) Boolean searching
+    ){
+        return ResponseEntity.ok(specService.queryGroupByGid(gid,cid,searching));
     }
 }

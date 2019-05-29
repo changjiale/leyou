@@ -31,9 +31,11 @@ public class SpecificationService {
         return  list;
     }
 
-    public List<SpecParam> queryGroupByGid(Long gid) {
+    public List<SpecParam> queryGroupByGid(Long gid, Long cid, Boolean searching ) {
         SpecParam param = new SpecParam();
         param.setGroupId(gid);
+        param.setCid(cid);
+        param.setSearching(searching);
         List<SpecParam> list = paramMapper.select(param);
         if (CollectionUtils.isEmpty(list)){
             //没查到

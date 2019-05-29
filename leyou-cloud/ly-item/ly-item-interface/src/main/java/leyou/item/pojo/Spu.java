@@ -38,6 +38,14 @@ public class Spu {
     @Transient
     private String bname;
 
+    //spu详情
+    @Transient
+    private SpuDetail spuDetail;
+
+    //sku集合
+    @Transient
+    private List<Sku> skus;
+
 
 
 }

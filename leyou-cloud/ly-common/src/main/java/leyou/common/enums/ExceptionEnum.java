@@ -20,7 +20,8 @@ public enum ExceptionEnum {
     GOODS_NOT_FOUND(404,"商品不存在"),
     BRAND_SAVE_ERROR(500,"新增商品失败"),
     UPLOAD_FILE_ERROR(500,"文件上传失败"),
-    UPLOAD_TYPE_ERROR(500,"无效文件类型"),
+    INVALID_FILE_ERROR(400,"无效文件类型"),
+    GOODS_SAVE_ERROR(400,"新增商品类型"),
     ;
     private int code;
     private String msg;
