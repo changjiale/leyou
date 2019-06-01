@@ -12,8 +12,8 @@ import java.util.List;
 public class SpecGroup {
 
     @Id
-    //@KeySql(useGeneratedKeys = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @KeySql(useGeneratedKeys = true)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long cid;
     private String name;

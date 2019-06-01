@@ -38,13 +38,13 @@ public class UploadService {
             String contentType = file.getContentType();
             System.out.println(contentType);
             if(!prop.getAllowTypes().contains(contentType)){
-                throw new LyException(ExceptionEnum.UPLOAD_TYPE_ERROR);
+                throw new LyException(ExceptionEnum.INVALID_FILE_ERROR);
             }
 
             //校验文件内容
             BufferedImage image = ImageIO.read(file.getInputStream());
             if(image == null){
-                throw new LyException(ExceptionEnum.UPLOAD_TYPE_ERROR);
+                throw new LyException(ExceptionEnum.INVALID_FILE_ERROR);
             }
 
             //上传到fastDFS

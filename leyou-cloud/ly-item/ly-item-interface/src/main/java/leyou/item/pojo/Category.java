@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @Data
 public class Category{
 	@Id
-	//@KeySql(useGeneratedKeys = true)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@KeySql(useGeneratedKeys = true)
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private Long parentId;

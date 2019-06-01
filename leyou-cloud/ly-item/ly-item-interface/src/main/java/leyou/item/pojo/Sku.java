@@ -1,6 +1,7 @@
 package leyou.item.pojo;
 
 import lombok.Data;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,7 +10,8 @@ import java.util.Date;
 @Table(name = "tb_sku")
 public class Sku {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @KeySql(useGeneratedKeys = true)
     private Long id;
     private Long spuId;
     private String title;
@@ -22,5 +24,5 @@ public class Sku {
     private Date lastUpdateTime;// 最后修改时间
 
     @Transient
-    private Long stock;// 库存
+    private Integer stock;// 库存
 }

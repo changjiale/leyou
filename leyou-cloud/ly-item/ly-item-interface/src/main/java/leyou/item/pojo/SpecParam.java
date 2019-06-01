@@ -1,6 +1,7 @@
 package leyou.item.pojo;
 
 import lombok.Data;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 
@@ -9,8 +10,8 @@ import javax.persistence.*;
 public class SpecParam {
 
     @Id
-    //@KeySql(useGeneratedKeys = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @KeySql(useGeneratedKeys = true)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long cid;
     private Long groupId;
