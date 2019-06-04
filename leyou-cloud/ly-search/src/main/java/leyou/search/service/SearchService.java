@@ -4,19 +4,32 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import leyou.common.enums.ExceptionEnum;
 import leyou.common.exception.LyException;
 import leyou.common.utils.JsonUtils;
+import leyou.common.utils.NumberUtils;
+import leyou.common.vo.PageResult;
 import leyou.item.pojo.*;
 import leyou.search.client.BrandClient;
 import leyou.search.client.CategoryClient;
 import leyou.search.client.GoodsClient;
 import leyou.search.client.SpecificationClient;
 import leyou.search.pojo.Goods;
+import leyou.search.pojo.SearchRequest;
+import leyou.search.repository.GoodsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
+@Service
 public class SearchService {
 
     @Autowired
@@ -27,6 +40,8 @@ public class SearchService {
     private GoodsClient goodsClient;
     @Autowired
     private SpecificationClient specClient;
+    @Autowired
+    private GoodsRepository repository;
 
     public Goods buildGoods(Spu spu){
         Long spuId = spu.getId();
@@ -48,6 +63,7 @@ public class SearchService {
 
         //查询sku
         List<Sku> skuList = goodsClient.querySkuBySpuId(spu.getId());
+        //System.out.println(spu.getId());
         if (CollectionUtils.isEmpty(skuList)){
             throw new LyException(ExceptionEnum.GOODS_SKU_NOT_FOUND);
         }
@@ -95,6 +111,11 @@ public class SearchService {
             //判断是否是通用规格参数
             if (param.getGeneric()){
                 value = genericSpec.get(param.getId());
+                //判断是否是数值类型
+                if (param.getNumeric()){
+                    //处理成段
+                    value = chooseSegment(value.toString(), param);
+                }
             }else {
                 value =specialSpec.get(param.getId());
             }
@@ -118,5 +139,54 @@ public class SearchService {
         goods.setSubTitle(spu.getSubTitle());
 
         return goods;
+    }
+
+
+    private String chooseSegment(String value, SpecParam p) {
+        double val = NumberUtils.toDouble(value);
+        String result = "其它";
+        // 保存数值段
+        for (String segment : p.getSegments().split(",")) {
+            String[] segs = segment.split("-");
+            // 获取数值范围
+            double begin = NumberUtils.toDouble(segs[0]);
+            double end = Double.MAX_VALUE;
+            if(segs.length == 2){
+                end = NumberUtils.toDouble(segs[1]);
+            }
+            // 判断是否在范围内
+            if(val >= begin && val < end){
+                if(segs.length == 1){
+                    result = segs[0] + p.getUnit() + "以上";
+                }else if(begin == 0){
+                    result = segs[1] + p.getUnit() + "以下";
+                }else{
+                    result = segment + p.getUnit();
+                }
+                break;
+            }
+        }
+        return result;
+    }
+
+    public PageResult<Goods> search(SearchRequest request) {
+        int page = request.getPage() - 1;
+        int size = request.getSize();
+        //创建查询构造器
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        //结果过滤
+        queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"id","subTitle","skus"},null));
+        //分页
+        queryBuilder.withPageable(PageRequest.of(page,size));
+        //过滤
+        queryBuilder.withQuery(QueryBuilders.matchQuery("all",request.getKey()));
+        
+        //查询
+        Page<Goods> result = repository.search(queryBuilder.build());
+        //解析结果
+        long total = result.getTotalElements();
+        int totalPage = result.getTotalPages();
+        List<Goods> goodsList = result.getContent();
+        return new PageResult<>(total,totalPage,goodsList);
     }
 }

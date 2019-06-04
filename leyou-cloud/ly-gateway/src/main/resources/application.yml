@@ -15,6 +15,7 @@ zuul:
   prefix: /api
   routes:
     item-service: /item/**
+    search-service: /search/**
     upload-serice:
       path: /upload/**
       serviceId: upload-service
