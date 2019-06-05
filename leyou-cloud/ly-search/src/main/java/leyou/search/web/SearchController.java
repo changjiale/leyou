@@ -16,7 +16,7 @@ public class SearchController {
     private SearchService searchService;
 
     @PostMapping("page")
-    public ResponseEntity<PageResult<Goods>> search(@RequestBody SearchRequest request){
+    public ResponseEntity<PageResult<Goods>> Search(@RequestBody SearchRequest request){
         return ResponseEntity.ok(searchService.search(request));
     }
 

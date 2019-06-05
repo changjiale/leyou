@@ -53,7 +53,7 @@ public class GoodsRepositoryTest {
             if (CollectionUtils.isEmpty(spuList)){
                 break;
             }
-            //System.out.println(spuList);
+            System.out.println(spuList);
             //构建成goods
             List<Goods> goodsList = spuList.stream().map(searchService::buildGoods).collect(Collectors.toList());
             //存入索引库
