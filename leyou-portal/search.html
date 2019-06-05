@@ -293,10 +293,10 @@
                         </li>
                     </ul>
                     <div class="top-pagination">
-                        <span>共 <i style="color: #222;">7600+</i> 商品</span>
-                        <span><i style="color: red;">2</i>/123</span>
-                        <a class="btn-arrow" href="#" style="display: inline-block">&lt;</a>
-                        <a class="btn-arrow" href="#" style="display: inline-block">&gt;</a>
+                        <span>共 <i style="color: #222;">{{total}}+</i> 商品</span>
+                        <span><i style="color: red;">{{search.page}}</i>/{{totalPage}}</span>
+                        <a class="btn-arrow" href="#" @click.prevent="prePage" style="display: inline-block">&lt;</a>
+                        <a class="btn-arrow" href="#" @click.prevent="nextPage" style="display: inline-block">&gt;</a>
                     </div>
                 </div>
             </div>
@@ -342,30 +342,19 @@
             <div class="fr">
                 <div class="sui-pagination pagination-large">
                     <ul>
-                        <li class="prev disabled">
-                            <a href="#">«上一页</a>
+                        <li :class="{prev:true, disabled:search.page === 1}">
+                            <a href="#" @click.prevent="prePage">«上一页</a>
                         </li>
-                        <li class="active">
-                            <a href="#">1</a>
+                        <li :class="{active : index(i) === search.page}" v-for="i in Math.min(5, totalPage)" :key="i">
+                            <a href="#" v-text="index(i)"></a>
                         </li>
-                        <li>
-                            <a href="#">2</a>
-                        </li>
-                        <li>
-                            <a href="#">3</a>
-                        </li>
-                        <li>
-                            <a href="#">4</a>
-                        </li>
-                        <li>
-                            <a href="#">5</a>
-                        </li>
-                        <li class="dotted"><span>...</span></li>
-                        <li class="next">
-                            <a href="#">下一页»</a>
+
+                        <li class="dotted" v-show="search.page+2<totalPage && totalPage > 5"><span>...</span></li>
+                        <li :class="{next:true, disabled:search.page === totalPage}">
+                            <a href="#" @click.prevent="nextPage">下一页»</a>
                         </li>
                     </ul>
-                    <div><span>共10页&nbsp;</span><span>
+                    <div><span>共{{totalPage}}页&nbsp;</span><span>
       到第
       <input type="text" class="page-num">
       页 <button class="page-confirm" onclick="alert(1)">确定</button></span></div>
@@ -470,15 +459,29 @@
             goodsList:[],
             total: 0,
             totalPage: 0,
-            selectSku:{}
+            selectSku:{},
         },
         created(){
             //获取请求参数
             const search = ly.parse(location.search.substring(1));
+            search.page = search.page ? parseInt(search.page) : 1;
             this.search = search;
             //发送后台
             this.loadData();
 
+        },
+        watch:{
+            search:{
+                deep: true,
+                handler(val, oldVal){
+                    if (!oldVal || !oldVal.key){
+                        return;
+                    }
+                    //this.loadData();
+                    //请求参数放入url
+                    location.search = "?" + ly.stringify(this.search);
+                }
+            }
         },
         methods:{
             loadData(){
@@ -500,7 +503,28 @@
 
                 });
 
-            }
+            },
+            index(i){
+                if (this.search.page <= 3 || this.totalPage < 5){
+                    return i;
+                }else if (this.search.page >= this.totalPage - 2){
+                    return this.totalPage - 5 + i;
+                }else {
+                    return i + this.search.page -3;
+                }
+            },
+            prePage(){
+                if (this.search.page > 1){
+                    this.search.page --;
+                }
+
+            },
+            nextPage(){
+                if (this.search.page < this.totalPage){
+                    this.search.page ++;
+                }
+
+            },
 
         },
         components:{
