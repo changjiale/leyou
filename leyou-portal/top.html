@@ -14,8 +14,8 @@
                     <div class="search">
                         <form action="" class="sui-form form-inline">
                             <!--searchAutoComplete-->
-                            <div class="input-append" @keyup.enter='search'>
-                                <input type="text" id="autocomplete" type="text" v-model="key"
+                            <div class="input-append"  >
+                                <input type="text" @keyup.native="search" id="autocomplete" type="text" v-model="key"
                                        class="input-error input-xxlarge" />
                                 <button @click="search" class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
                             </div>
@@ -83,6 +83,7 @@
             },
             methods: {
                 search() {
+                    console.log(11)
                     window.location = 'search.html?key=' + this.key;
                 },
                 getUrlParam: function (name) {
