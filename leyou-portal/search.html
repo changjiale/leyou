@@ -107,8 +107,8 @@
             </ul>
             <!--已选择过滤项-->
             <ul class="tags-choose">
-                <li class="tag" v-for="(v,k) in search.filter" :key="key">
-                    {{k === brandId ? '品牌' : k}}:<span style="color: red" v-text="findValue(k,v)"></span>
+                <li class="tag" v-for="(v,k) in search.filter" :key="k">
+                    {{k === "brandId" ? '品牌' : k}}:<span style="color: red" v-text="findValue(k,v)"></span>
                     <i class="sui-icon icon-tb-close" @click="deleteFilter(k,v)"></i>
                 </li>
             </ul>
@@ -462,10 +462,10 @@
             //查找顶部过滤项标签
             findValue(k,v){
                 if (! this.filters) return;
-                if (k !== 'brandId')
+                if (k !== "brandId")
                     return v;
                 else{
-                    return this.filters.find(f => f.k === 'brandId').options[0].name;
+                    return this.filters.find(f => f.k === "brandId").options[0].name;
                 }
             },
             //删除顶部过滤项标签

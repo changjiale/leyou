@@ -17,6 +17,8 @@ public class SearchController {
 
     @PostMapping("page")
     public ResponseEntity<PageResult<Goods>> Search(@RequestBody SearchRequest request){
+        System.out.println("$$$$$$$$$$$$$$$$"+request.getFilter().size());
+        request.getFilter().entrySet().forEach( a -> System.out.println(a.getKey() + "  @@@@@@@@@@@@"+a.getValue()));
         return ResponseEntity.ok(searchService.search(request));
     }
 
