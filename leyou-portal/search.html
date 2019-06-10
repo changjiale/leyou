@@ -184,7 +184,7 @@
                     <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                         <div class="list-wrap">
                             <div class="p-img">
-                                <a href="item.html" target="_blank"><img :src="goods.selectSku.images" height="200"/></a>
+                                <a :href="'/item/'+goods.id+'.html'" target="_blank"><img :src="goods.selectSku.images" height="200"/></a>
                                 <ul class="skus">
                                     <li :class="{selected: goods.selectSku.id === sku.id}" @mouseenter="goods.selectSku=sku"
                                         v-for="sku in goods.skus" :key="sku.id">

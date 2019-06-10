@@ -1,10 +1,12 @@
 package leyou.item.api;
 
+import leyou.item.pojo.SpecGroup;
 import leyou.item.pojo.SpecParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.beans.Transient;
 import java.util.List;
 
 public interface SpecificationApi {
@@ -22,4 +24,12 @@ public interface SpecificationApi {
             @RequestParam(value = "cid",required = false) Long cid,
             @RequestParam(value = "searching",required = false) Boolean searching
     );
+
+    /**
+     * 根据分类查询规格组及组内属性
+     * @param cid
+     * @return
+     */
+    @GetMapping("spec/group")
+    List<SpecGroup> queryListByCid(@RequestParam("cid") Long cid);
 }
