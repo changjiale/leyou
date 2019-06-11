@@ -5,15 +5,22 @@ import leyou.page.client.BrandClient;
 import leyou.page.client.CategoryClient;
 import leyou.page.client.GoodsClient;
 import leyou.page.client.SpecificationClient;
+import leyou.page.utils.ThreadUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class PageService {
 
     @Autowired
@@ -24,7 +31,14 @@ public class PageService {
     private GoodsClient goodsClient;
     @Autowired
     private SpecificationClient specsClient;
+    @Autowired
+    private TemplateEngine templateEngine;
 
+    /**
+     * 加载详情页数据
+     * @param spuId
+     * @return
+     */
     public Map<String, Object> loadModel(Long spuId) {
         Map<String, Object> model = new HashMap<>();
         //查询spu
@@ -48,5 +62,34 @@ public class PageService {
         model.put("categories", categories);
         model.put("specs", specs);
         return model;
+    }
+
+    public void createHtml(Long spuId){
+        //上下文
+        Context context = new Context();
+        context.setVariables(loadModel(spuId));
+        //输出流
+        File dest = new File("D:\\xampp\\nginx-1.14.0\\html\\item", spuId+ ".html");
+        try(PrintWriter writer = new PrintWriter(dest, "UTF-8")){
+            //生成html
+            templateEngine.process("item",context,writer);
+        }catch (Exception e){
+            log.error("[静态页服务] 生成静态页面异常！",e);
+        }
+
+    }
+
+    /**
+     * 新建线程处理页面静态化
+     * @param spuId
+     */
+    public void asyncExcute(Long spuId) {
+        ThreadUtils.execute(()->createHtml(spuId));
+        /*ThreadUtils.execute(new Runnable() {
+            @Override
+            public void run() {
+                createHtml(spuId);
+            }
+        });*/
     }
 }

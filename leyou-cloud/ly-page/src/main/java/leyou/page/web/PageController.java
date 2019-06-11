@@ -20,6 +20,7 @@ public class PageController {
         Map<String, Object> attributes = pageService.loadModel(spuId);
         //准备模型
         model.addAllAttributes(attributes);
+        pageService.asyncExcute(spuId);
         return "item";
     }
 }
