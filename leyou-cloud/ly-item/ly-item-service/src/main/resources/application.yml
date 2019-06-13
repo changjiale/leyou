@@ -8,6 +8,19 @@ spring:
     url: jdbc:mysql://localhost:3306/leyou?useUnicode=true&characterEncoding=utf-8
     username: root
     password:
+  rabbitmq:
+    host: 192.168.10.128
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
+    template: #模板
+      retry:   #生产者重试
+        enabled: true
+        initial-interval: 10000ms #10s
+        max-interval: 30000ms
+        multiplier: 2  #第二次重试 2*....
+      exchange: ly.item.exchange   #默认交换机
+    publisher-confirms: true  #生产者确认
 eureka:
   client:
     service-url:

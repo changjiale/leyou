@@ -70,6 +70,11 @@ public class PageService {
         context.setVariables(loadModel(spuId));
         //输出流
         File dest = new File("D:\\xampp\\nginx-1.14.0\\html\\item", spuId+ ".html");
+
+        if (dest.exists()){
+            dest.delete();
+        }
+
         try(PrintWriter writer = new PrintWriter(dest, "UTF-8")){
             //生成html
             templateEngine.process("item",context,writer);
@@ -91,5 +96,12 @@ public class PageService {
                 createHtml(spuId);
             }
         });*/
+    }
+
+    public void deleteHtml(Long spuId) {
+        File dest = new File("D:\\xampp\\nginx-1.14.0\\html\\item", spuId+ ".html");
+        if (dest.exists()){
+            dest.delete();
+        }
     }
 }
