@@ -31,6 +31,8 @@ public enum ExceptionEnum {
 
     VERIFY_CODE_NOT_MATCHING(400, "验证码错误"),
     INVALID_PARAM(400, "参数错误"),
+    USER_NOT_EXIST(404, "用户不存在"),
+    PASSWORD_NOT_MATCHING(400, "密码错误"),
 
     ;
     private int code;

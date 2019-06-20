@@ -98,4 +98,24 @@ public class UserService {
 
 
     }
+
+    public User queryUser(String username, String password) {
+        User record = new User();
+        record.setUsername(username);
+
+        //首先根据用户名查询用户
+        User user = userMapper.selectOne(record);
+
+        if (user == null) {
+            throw new LyException(ExceptionEnum.USER_NOT_EXIST);
+        }
+
+        //检验密码是否正确
+        if (!StringUtils.equals(CodecUtils.md5Hex(password, user.getSalt()), user.getPassword())) {
+            //密码不正确
+            throw new LyException(ExceptionEnum.PASSWORD_NOT_MATCHING);
+        }
+
+        return user;
+    }
 }
