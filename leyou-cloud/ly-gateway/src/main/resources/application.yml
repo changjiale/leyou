@@ -16,6 +16,7 @@ zuul:
   routes:
     item-service: /item/**
     search-service: /search/**
+    user-service: /user/**
     upload-serice:
       path: /upload/**
       serviceId: upload-service

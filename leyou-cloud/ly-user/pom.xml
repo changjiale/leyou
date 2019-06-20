@@ -10,11 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>leyou.user.service</groupId>
-    <artifactId>ly-item</artifactId>
+    <artifactId>ly-user</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>ly-item-interface</module>
-        <module>ly-item-service</module>
+        <module>ly-user-interface</module>
+        <module>ly-user-service</module>
     </modules>
 
 

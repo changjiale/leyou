@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>leyou.service</groupId>
+    <groupId>leyou.user.service</groupId>
     <artifactId>ly-page</artifactId>
 
 
@@ -31,7 +31,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>leyou.service</groupId>
+            <groupId>leyou.user.service</groupId>
             <artifactId>ly-item-interface</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>

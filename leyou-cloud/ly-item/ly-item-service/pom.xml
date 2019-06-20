@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ly-item</artifactId>
-        <groupId>leyou.service</groupId>
+        <groupId>leyou.user.service</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>leyou.service</groupId>
+    <groupId>leyou.user.service</groupId>
     <artifactId>ly-item-service</artifactId>
 
     <dependencies>
@@ -61,7 +61,7 @@
         </dependency>
         <!--引入interface-->
         <dependency>
-            <groupId>leyou.service</groupId>
+            <groupId>leyou.user.service</groupId>
             <artifactId>ly-item-interface</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>

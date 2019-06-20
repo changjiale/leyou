@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ly-item</artifactId>
+        <artifactId>ly-user</artifactId>
         <groupId>leyou.user.service</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>leyou.user.service</groupId>
-    <artifactId>ly-item-interface</artifactId>
+    <artifactId>ly-user-interface</artifactId>
 
     <dependencies>
         <dependency>
@@ -24,8 +24,6 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-
 
 
 </project>

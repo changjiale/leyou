@@ -27,6 +27,10 @@ public enum ExceptionEnum {
     GOODS_SAVE_ERROR(500,"新增商品失败"),
     GOODS_UPDATE_ERROR(500,"更新商品失败"),
     GOODS_ID_CANNOT_BE_NULL(400,"商品id不能为空"),
+    INVALID_USER_DATA_TYPE(400,"用户数据类型无效"),
+
+    VERIFY_CODE_NOT_MATCHING(400, "验证码错误"),
+    INVALID_PARAM(400, "参数错误"),
 
     ;
     private int code;
