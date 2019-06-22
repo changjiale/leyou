@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserInfo {
     private Long id;
-    private String name;
+    private String username;
 }

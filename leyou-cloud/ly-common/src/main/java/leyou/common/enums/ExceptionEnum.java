@@ -35,6 +35,8 @@ public enum ExceptionEnum {
     PASSWORD_NOT_MATCHING(400, "密码错误"),
     USERNAME_OR_PASSWORD_ERROR(400, "账号或密码错误"),
 
+    UN_AUTHORIZED(403, "未授权"),
+
     ;
     private int code;
     private String msg;

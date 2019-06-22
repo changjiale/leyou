@@ -1,7 +1,10 @@
 package leyou.auth.web;
 
+import io.jsonwebtoken.Jwt;
+import leyou.auth.entity.UserInfo;
 import leyou.auth.properties.JwtProperties;
 import leyou.auth.service.AuthService;
+import leyou.auth.utils.JwtUtils;
 import leyou.common.enums.ExceptionEnum;
 import leyou.common.exception.LyException;
 import leyou.common.utils.CookieUtils;
@@ -11,10 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,4 +48,33 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 校验用户登录状态
+     * @param token
+     * @return
+     */
+    @GetMapping("verify")
+    public ResponseEntity<UserInfo> verify(@CookieValue("LY_TOKEN") String token,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response){
+        if(StringUtils.isBlank(token)){
+            //如果没有token，证明未登录，返回403
+            throw new LyException(ExceptionEnum.UN_AUTHORIZED);
+        }
+        //解析客户端
+        try{
+            UserInfo info = JwtUtils.getInfoFromToken(token,props.getPublicKey());
+
+            //刷新token，重新生成
+            String newToken = JwtUtils.generateToken(info, props.getPrivateKey(), props.getExpire());
+            CookieUtils.newBuilder(response).httpOnly().request(request).build(cookieName, newToken);
+
+            //已登录 返回用户信息
+            return ResponseEntity.ok(info);
+        }catch (Exception e){
+            //token已过期
+            throw new LyException(ExceptionEnum.UN_AUTHORIZED);
+        }
+
+    }
 }

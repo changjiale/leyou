@@ -53,3 +53,16 @@ ribbon:
   MaxAutoRetries: 0        #当前服务重试次数
   MaxAutoRetriesNextServer: 0 #切换服务器重试次数
 
+ly:
+  jwt:
+    pubKeyPath: E:\code\rsa\rsa.pub
+    cookieName: LY_TOKEN
+  filter:
+    allowPaths:
+    - /api/auth
+    - /api/search
+    - /api/user/register
+    - /api/user/check
+    - /api/user/send
+    - /api/item
+

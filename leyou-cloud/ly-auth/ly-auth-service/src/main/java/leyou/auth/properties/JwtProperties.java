@@ -27,6 +27,8 @@ public class JwtProperties {
 
     private PrivateKey privateKey; // 私钥
 
+    private String cookieName;
+
 
     /**
      * @PostContruct：在构造方法执行之后执行该方法

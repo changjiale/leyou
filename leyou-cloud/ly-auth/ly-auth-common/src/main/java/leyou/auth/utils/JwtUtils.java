@@ -1,7 +1,7 @@
 package leyou.auth.utils;
 
 import io.jsonwebtoken.*;
-import leyou.auth.entity.JwtConstants;
+import leyou.auth.entity.JwtConstans;
 import leyou.auth.entity.UserInfo;
 import org.joda.time.DateTime;
 import java.security.PrivateKey;
@@ -10,89 +10,97 @@ import java.security.PublicKey;
 
 public class JwtUtils {
     /**
-     * 生成Token
-     * @param userInfo
-     * @param privateKey
-     * @param expireMinutes
+     * 私钥加密token
+     *
+     * @param userInfo      载荷中的数据
+     * @param privateKey    私钥
+     * @param expireMinutes 过期时间，单位秒
      * @return
+     * @throws Exception
      */
-    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) {
+    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-                .claim(JwtConstants.JWT_KEY_ID, userInfo.getId())
-                .claim(JwtConstants.JWT_KEY_USER_NAME, userInfo.getName())
-                .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
+                .claim(JwtConstans.JWT_KEY_ID, userInfo.getId())
+                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUsername())
+                .setExpiration(DateTime.now().plusDays(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
 
     /**
-     * 生成Token
-     * @param userInfo
-     * @param privateKey
-     * @param expireMinutes
+     * 私钥加密token
+     *
+     * @param userInfo      载荷中的数据
+     * @param privateKey    私钥字节数组
+     * @param expireMinutes 过期时间，单位秒
      * @return
      * @throws Exception
      */
     public static String generateToken(UserInfo userInfo, byte[] privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-                .claim(JwtConstants.JWT_KEY_ID, userInfo.getId())
-                .claim(JwtConstants.JWT_KEY_USER_NAME, userInfo.getName())
-                .setExpiration(DateTime.now().plus(expireMinutes).toDate())
-                .signWith(SignatureAlgorithm.ES256, RsaUtils.getPrivateKey(privateKey))
+                .claim(JwtConstans.JWT_KEY_ID, userInfo.getId())
+                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUsername())
+                .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
+                .signWith(SignatureAlgorithm.RS256, RsaUtils.getPrivateKey(privateKey))
                 .compact();
     }
 
     /**
-     * 公钥解析Token
-     * @param publicKey
-     * @param token
-     * @return
-     */
-    public static Jws<Claims> parseToken(PublicKey publicKey, String token) {
-        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
-    }
-
-
-    /**
-     * 公钥解析Token
-     * @param publicKey
-     * @param token
+     * 公钥解析token
+     *
+     * @param token     用户请求中的token
+     * @param publicKey 公钥
      * @return
      * @throws Exception
      */
-    public static Jws<Claims> parseToken(byte[] publicKey, String token) throws Exception {
-        return Jwts.parser().setSigningKey(RsaUtils.getPublicKey(publicKey)).parseClaimsJws(token);
+    private static Jws<Claims> parserToken(String token, PublicKey publicKey) {
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
 
+    /**
+     * 公钥解析token
+     *
+     * @param token     用户请求中的token
+     * @param publicKey 公钥字节数组
+     * @return
+     * @throws Exception
+     */
+    private static Jws<Claims> parserToken(String token, byte[] publicKey) throws Exception {
+        return Jwts.parser().setSigningKey(RsaUtils.getPublicKey(publicKey))
+                .parseClaimsJws(token);
+    }
 
     /**
-     * 从Token中获取用户信息（使用公钥解析）
-     * @param publicKey
-     * @param token
-     * @return
+     * 获取token中的用户信息
+     *
+     * @param token     用户请求中的令牌
+     * @param publicKey 公钥
+     * @return 用户信息
+     * @throws Exception
      */
-    public static UserInfo getUserInfo(PublicKey publicKey, String token) {
-        Jws<Claims> claimsJws = parseToken(publicKey, token);
+    public static UserInfo getInfoFromToken(String token, PublicKey publicKey) throws Exception {
+        Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new UserInfo(
-                ObjectUtils.toLong(body.get(JwtConstants.JWT_KEY_ID)),
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME))
+                ObjectUtils.toLong(body.get(JwtConstans.JWT_KEY_ID)),
+                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
         );
     }
 
     /**
-     * 从Token中获取用户信息（使用公钥解析）
-     * @param publicKey
-     * @param token
-     * @return
+     * 获取token中的用户信息
+     *
+     * @param token     用户请求中的令牌
+     * @param publicKey 公钥
+     * @return 用户信息
      * @throws Exception
      */
-    public static UserInfo getUserInfo(byte[] publicKey, String token) throws Exception {
-        Jws<Claims> claimsJws = parseToken(publicKey, token);
+    public static UserInfo getInfoFromToken(String token, byte[] publicKey) throws Exception {
+        Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new UserInfo(
-                ObjectUtils.toLong(body.get(JwtConstants.JWT_KEY_ID)),
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME))
+                ObjectUtils.toLong(body.get(JwtConstans.JWT_KEY_ID)),
+                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
         );
     }
 }

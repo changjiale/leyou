@@ -49,6 +49,7 @@ const shortcut = {
             .then(resp => {
                 this.user = resp.data;
             })
+
     },
     methods: {
         gotoLogin() {

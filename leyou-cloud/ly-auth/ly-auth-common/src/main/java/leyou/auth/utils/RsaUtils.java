@@ -12,34 +12,34 @@ import java.security.spec.X509EncodedKeySpec;
  * @date 2018/9/30
  */
 public class RsaUtils {
-
     /**
      * 从文件中读取公钥
      *
-     * @param fileName
-     * @return
+     * @param filename 公钥保存路径，相对于classpath
+     * @return 公钥对象
      * @throws Exception
      */
-    public static PublicKey getPublicKey(String fileName) throws Exception {
-        byte[] bytes = readFile(fileName);
+    public static PublicKey getPublicKey(String filename) throws Exception {
+        byte[] bytes = readFile(filename);
         return getPublicKey(bytes);
     }
 
     /**
-     * 从文件中读取私钥
-     * @param fileName
-     * @return
+     * 从文件中读取密钥
+     *
+     * @param filename 私钥保存路径，相对于classpath
+     * @return 私钥对象
      * @throws Exception
      */
-    public static PrivateKey getPrivateKey(String fileName) throws Exception{
-        byte[] bytes = readFile(fileName);
+    public static PrivateKey getPrivateKey(String filename) throws Exception {
+        byte[] bytes = readFile(filename);
         return getPrivateKey(bytes);
     }
 
     /**
      * 获取公钥
      *
-     * @param bytes
+     * @param bytes 公钥的字节形式
      * @return
      * @throws Exception
      */
@@ -50,9 +50,9 @@ public class RsaUtils {
     }
 
     /**
-     * 生成私钥
+     * 获取密钥
      *
-     * @param bytes
+     * @param bytes 私钥的字节形式
      * @return
      * @throws Exception
      */
@@ -63,19 +63,7 @@ public class RsaUtils {
     }
 
     /**
-     * 读取文件
-     *
-     * @param fileName
-     * @return
-     * @throws IOException
-     */
-    public static byte[] readFile(String fileName) throws IOException {
-        return Files.readAllBytes(new File(fileName).toPath());
-
-    }
-
-    /**
-     * 根据密文，生存rsa公钥和私钥,并写入指定文件
+     * 根据密文，生成rsa公钥和私钥,并写入指定文件
      *
      * @param publicKeyFilename  公钥文件路径
      * @param privateKeyFilename 私钥文件路径
@@ -96,14 +84,11 @@ public class RsaUtils {
         writeFile(privateKeyFilename, privateKeyBytes);
     }
 
-    /**
-     * 向目标路径写入文件
-     *
-     * @param destPath
-     * @param bytes
-     * @throws IOException
-     */
-    public static void writeFile(String destPath, byte[] bytes) throws IOException {
+    private static byte[] readFile(String fileName) throws Exception {
+        return Files.readAllBytes(new File(fileName).toPath());
+    }
+
+    private static void writeFile(String destPath, byte[] bytes) throws IOException {
         File dest = new File(destPath);
         if (!dest.exists()) {
             dest.createNewFile();
