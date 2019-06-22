@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 
 /**
- * @author bystander
- * @date 2018/10/1
+ * 对外api接口
  */
 public interface UserApi {
 

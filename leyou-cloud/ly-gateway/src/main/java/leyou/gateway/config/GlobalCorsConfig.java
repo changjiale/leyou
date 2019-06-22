@@ -1,10 +1,12 @@
 package leyou.gateway.config;
 
+import org.omg.CORBA.Request;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 public class GlobalCorsConfig {

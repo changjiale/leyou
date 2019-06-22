@@ -11,17 +11,34 @@ eureka:
   instance:
     prefer-ip-address: true
     ip-address: 127.0.0.1
+#zuul:
+#  prefix: /api
+#  routes:
+#    item-service: /item/**
+#    search-service: /search/**
+#    user-service: /user/**
+#    auth-service: /auth/**
+#    upload-serice:
+#      path: /upload/**
+#      serviceId: upload-service
+#      strip-prefix: false
+#  add-host-header: true
+#  sensitive-headers:
 zuul:
   prefix: /api
   routes:
     item-service: /item/**
-    search-service: /search/**
     user-service: /user/**
-    upload-serice:
+    search-service: /search/**
+    auth-service: /auth/**
+    cart-service: /cart/**
+    order-service: /order-service/**
+    upload-service:
       path: /upload/**
-      serviceId: upload-service
+      service: upload-service
       strip-prefix: false
-
+  sensitive-headers:
+  add-host-header: true
 
 hystrix:
   command:
