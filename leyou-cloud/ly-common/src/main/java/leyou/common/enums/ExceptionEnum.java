@@ -36,6 +36,7 @@ public enum ExceptionEnum {
     USERNAME_OR_PASSWORD_ERROR(400, "账号或密码错误"),
 
     UN_AUTHORIZED(403, "未授权"),
+    CART_NOT_FOUND(404, "购物车为空"),
 
     ;
     private int code;

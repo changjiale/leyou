@@ -226,4 +226,21 @@ public class GoodsService {
         spu.setSpuDetail(queryDetailById(id));
         return spu;
     }
+
+    public List<Sku> querySkuByIds(List<Long> ids) {
+
+        List<Sku> skus = skuMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(skus)){
+            throw new LyException(ExceptionEnum.GOODS_SKU_NOT_FOUND);
+        }
+        //查询库存
+        List<Stock> stockList = stockMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(stockList)){
+            throw new LyException(ExceptionEnum.GOODS_STOCK_NOT_FOUND);
+        }
+        //把stock变成一个map key是sku的id 值是库存值
+        Map<Long, Integer> stockMap = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
+        skus.forEach(s -> s.setStock(stockMap.get(s.getId())));
+        return skus;
+    }
 }

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class AuthController {
 
         //将Token写入cookie中
         System.out.println(cookieName);
-        CookieUtils.newBuilder(response).httpOnly().request(request).build(cookieName, token);
+        CookieUtils.newBuilder(response).httpOnly().maxAge(props.getCookieMaxAge()).request(request).build(cookieName, token);
         return ResponseEntity.ok().build();
     }
 
@@ -64,17 +65,34 @@ public class AuthController {
         //解析客户端
         try{
             UserInfo info = JwtUtils.getInfoFromToken(token,props.getPublicKey());
+            System.out.println(info);
 
             //刷新token，重新生成
             String newToken = JwtUtils.generateToken(info, props.getPrivateKey(), props.getExpire());
-            CookieUtils.newBuilder(response).httpOnly().request(request).build(cookieName, newToken);
+            CookieUtils.newBuilder(response).httpOnly().maxAge(props.getCookieMaxAge()).request(request).build(cookieName, newToken);
 
             //已登录 返回用户信息
             return ResponseEntity.ok(info);
         }catch (Exception e){
             //token已过期
-            throw new LyException(ExceptionEnum.UN_AUTHORIZED);
+            //throw new LyException(ExceptionEnum.UN_AUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
     }
+    /**
+     * 注销登录
+     *
+     * @param token
+     * @param response
+     * @return
+     */
+    @GetMapping("logout")
+    public ResponseEntity<Void> logout(@CookieValue("LY_TOKEN") String token, HttpServletResponse response) {
+        if (StringUtils.isNotBlank(token)) {
+            CookieUtils.newBuilder(response).maxAge(0).build(props.getCookieName(), token);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

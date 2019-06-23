@@ -18,7 +18,7 @@ public class JwtUtils {
      * @return
      * @throws Exception
      */
-    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
+    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes){
         return Jwts.builder()
                 .claim(JwtConstans.JWT_KEY_ID, userInfo.getId())
                 .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUsername())
@@ -78,7 +78,7 @@ public class JwtUtils {
      * @return 用户信息
      * @throws Exception
      */
-    public static UserInfo getInfoFromToken(String token, PublicKey publicKey) throws Exception {
+    public static UserInfo getInfoFromToken(String token, PublicKey publicKey){
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new UserInfo(

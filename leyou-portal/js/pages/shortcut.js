@@ -9,7 +9,7 @@ const shortcut = {
                </li>\
                <li v-else class='f-item'> \
                    请<a href='javascript:void(0)' @click='gotoLogin'>登录</a>　 \
-                   <span><a href='register.html' target='_blank'>免费注册</a></span> \
+                   <span><a href='/register.html' target='_blank'>免费注册</a></span> \
                </li> \
            </ul> \
            <ul class='fr'> \
@@ -26,9 +26,9 @@ const shortcut = {
                <li class='f-item' id='service'> \
                    <span>客户服务</span> \
                    <ul class='service'> \
-                       <li><a href='cooperation.html' target='_blank'>合作招商</a></li> \
-                       <li><a href='shoplogin.html' target='_blank'>商家后台</a></li> \
-                       <li><a href='cooperation.html' target='_blank'>合作招商</a></li> \
+                       <li><a href='/cooperation.html' target='_blank'>合作招商</a></li> \
+                       <li><a href='/shoplogin.html' target='_blank'>商家后台</a></li> \
+                       <li><a href='/cooperation.html' target='_blank'>合作招商</a></li> \
                        <li><a href='#'>商家后台</a></li> \
                    </ul> \
                </li> \
@@ -53,7 +53,7 @@ const shortcut = {
     },
     methods: {
         gotoLogin() {
-            window.location = "login.html?returnUrl=" + window.location;
+            window.location = "/login.html?returnUrl=" + window.location;
         }
     }
 }

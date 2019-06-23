@@ -29,6 +29,8 @@ public class JwtProperties {
 
     private String cookieName;
 
+    private int cookieMaxAge;
+
 
     /**
      * @PostContruct：在构造方法执行之后执行该方法
