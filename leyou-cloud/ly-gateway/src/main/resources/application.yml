@@ -32,6 +32,7 @@ zuul:
     search-service: /search/**
     auth-service: /auth/**
     cart-service: /cart/**
+    order-service: /order/**
     upload-service:
       path: /upload/**
       service: upload-service
