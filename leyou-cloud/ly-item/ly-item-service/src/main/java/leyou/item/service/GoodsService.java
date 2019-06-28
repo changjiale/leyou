@@ -2,6 +2,7 @@ package leyou.item.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import leyou.common.dto.CartDto;
 import leyou.common.enums.ExceptionEnum;
 import leyou.common.exception.LyException;
 import leyou.common.vo.PageResult;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -242,5 +244,16 @@ public class GoodsService {
         Map<Long, Integer> stockMap = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
         skus.forEach(s -> s.setStock(stockMap.get(s.getId())));
         return skus;
+    }
+
+    @Transactional
+    public void decreaseStock(List<CartDto> carts) {
+        for(CartDto cart :carts){
+            //减库存
+            int count = stockMapper.decreaseStock(cart.getSkuId(), cart.getNum());
+            if (count != 1){
+                throw new LyException(ExceptionEnum.STOCK_NOT_ENOUGH);
+            }
+        }
     }
 }

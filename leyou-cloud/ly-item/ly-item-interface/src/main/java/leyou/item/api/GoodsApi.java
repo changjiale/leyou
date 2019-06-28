@@ -1,13 +1,12 @@
 package leyou.item.api;
 
+import leyou.common.dto.CartDto;
 import leyou.common.vo.PageResult;
 import leyou.item.pojo.Sku;
 import leyou.item.pojo.Spu;
 import leyou.item.pojo.SpuDetail;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,4 +49,15 @@ public interface GoodsApi {
      */
     @GetMapping("spu/{id}")
     Spu querySpuBuId(@PathVariable("id") Long id);
+
+    /**
+     *根据sku的id的集合查询所有sku
+     * @param ids
+     * @return
+     */
+    @GetMapping("/sku/list/ids")
+    List<Sku> querySkuByIds(@RequestParam("ids") List<Long> ids );
+
+    @PostMapping("stock/decrease")
+    Void decreaseStock(@RequestBody List<CartDto> carts);
 }
