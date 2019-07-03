@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,7 +115,7 @@ public class OrderService {
         OrderStatus orderStatus = new OrderStatus();
         orderStatus.setCreateTime(order.getCreateTime());
         orderStatus.setOrderId(orderId);
-        orderStatus.setStatus(OrderStatusEnum.PAY_UP.value());
+        orderStatus.setStatus(OrderStatusEnum.INIT.value());
         count = orderStatusMapper.insertSelective(orderStatus);
         if (count != 1){
             log.error("[创建订单]创建订单失败,orderId:{}",orderId);
@@ -125,5 +126,29 @@ public class OrderService {
         List<CartDto> carts = orderDto.getCarts();
         goodsClient.decreaseStock(carts);
         return orderId;
+    }
+
+    public Order queryOrderByid(Long id) {
+        Order order = orderMapper.selectByPrimaryKey(id);
+        if (order == null){
+            //不存在
+            throw new LyException(ExceptionEnum.ORDER_NOT_FOUND);
+        }
+        //查询订单详情
+        OrderDetail detail = new OrderDetail();
+        detail.setOrderId(id);
+        List<OrderDetail> details = orderDetailMapper.select(detail);
+       if (CollectionUtils.isEmpty(details)){
+           throw new LyException(ExceptionEnum.ORDER_DETAIL_NOT_FOUND);
+       }
+       order.setOrderDetails(details);
+       //查询订单状态
+        OrderStatus orderStatus = orderStatusMapper.selectByPrimaryKey(id);
+       if (orderStatus == null){
+           //不存在
+           throw new LyException(ExceptionEnum.ORDER_STATUS_NOT_FOUND);
+       }
+       order.setOrderStatus(orderStatus);
+        return order;
     }
 }
